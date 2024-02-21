@@ -277,29 +277,23 @@ struct card* theWinnerTakesItAll(struct card* victor, struct card* victorEnd, st
 
 }
 
-struct card* conquer(struct card* victor, struct card* victorEnd, struct card* vanquished)
+void conquer(struct card** victor, struct card* victorEnd, struct card** vanquished)
 {
-    victorEnd->nextCard = vanquished;
-    // printf("\nGurabiga1: ");
-    // printCard(vanquished);
-    vanquished = vanquished->nextCard;
-    // printf("\nGurabiga2: ");
-    // printCard(vanquished);
-    // printf("\n");
-    // showDeck(vanquished);
+
+    victorEnd->nextCard =  (*vanquished);
+     (*vanquished) =  (*vanquished)->nextCard;
     victorEnd = victorEnd->nextCard;
 
-    victorEnd->nextCard = victor;
-    victor = victor->nextCard;
+    victorEnd->nextCard = (*victor);
+    (*victor) = (*victor)->nextCard;
     victorEnd = victorEnd->nextCard;
     victorEnd->nextCard= NULL;
     
 
     printf("\nvictor\n");
-    showDeck (victor);
+    showDeck ((*victor));
     printf("\nvanquished\n");
-    showDeck (vanquished);
-     return vanquished;
+    showDeck ( (*vanquished));
 }
 
 int actualGame(
@@ -330,12 +324,12 @@ int actualGame(
             switch (winner)
             {
             case FISRT_IS_WINNER:
-                Deck1Start = conquer(Deck1Start, Deck1Stop, Deck2Start);
+                conquer(&Deck1Start, Deck1Stop, &Deck2Start);
                 printf("\n[1]\n");
                 break;
             case SECOND_IS_WINNER:
                 // Deck1Start = conquer(Deck2Start, Deck2Stop, Deck1Start);
-                Deck2Start = conquer(Deck2Start, Deck2Stop, Deck1Start);
+                conquer(&Deck2Start, Deck2Stop, &Deck1Start);
                 printf("\n[2]\n");
                 break;
             case ITS_A_DRAW:
