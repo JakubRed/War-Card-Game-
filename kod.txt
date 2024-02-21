@@ -1,0 +1,67 @@
+truct card* shuffle(
+    struct card* pDeck){
+    struct card* pFirstStart = pDeck;
+    struct card* pFirstStop = pDeck;
+    struct card* pSecoondStart = pDeck;
+    struct card* peScoondStop = pDeck;
+    struct card* pThirdStart = pDeck;
+    struct card* pThirdStop = pDeck;
+    // struct card* pFirstHand = pDeck;
+    // struct card* pSecondHand = pDeck;
+    struct card* pFHandDivide = NULL;
+    struct card* pSHandDivide = NULL;
+    int cardCount = 1;
+    int firstRandomAmount = 0;
+    srand(time(NULL));
+    int secondRandomAmount = 0;
+
+    for (struct card* pCurrent = pFirstStart; NULL != pCurrent->nextCard ; cardCount++)
+    {
+        pCurrent = pCurrent->nextCard;
+    }
+    
+    printf("Card count = %d\n", cardCount);
+    for (size_t shuffleCount = 0; shuffleCount < 15; shuffleCount++)//how much shuffle
+    {
+        firstRandomAmount = rand()%(cardCount - 1);
+        printf("\nShUFFLE: %d ", shuffleCount);
+        printf("\tRandomAmount  = %d", firstRandomAmount);
+        pFirstHand = pFirstStart;
+        pSecondHand = pFirstStart;
+        for (size_t i = 1; i < firstRandomAmount; i++)
+        {
+            pFirstHand = pFirstHand->nextCard;
+        }
+        do{
+            secondRandomAmount = rand()%(cardCount - 1);
+        } while (firstRandomAmount == secondRandomAmount);
+        for (size_t i = 1; i < secondRandomAmount; i++)
+        {
+            pSecondHand = pSecondHand->nextCard;
+        }
+        
+        printf("\tSecondRandomAmount = %d, card = ", secondRandomAmount);
+        printCard(pSecondHand->nextCard);
+        printf("\n");
+        
+        pFHandDivide = pFirstHand->nextCard; 
+        pSHandDivide = pSecondHand->nextCard; 
+        pFirstHand->nextCard = NULL;
+        pSecondHand->nextCard = NULL;
+        // printf("\nOld ");
+        // showDeck(pFirst);
+        // printf("\nNew ");
+        // showDeck(pSecond);
+
+        for (pFirstHand = pFHandDivide; NULL != pFirstHand->nextCard ;)
+        {
+            pFirstHand = pFirstHand->nextCard;
+        }
+
+        pFirstHand->nextCard = pFirstStart;
+        pFirstStart = pFHandDivide;  
+        printf("\nDeck: ");
+        showDeck(pFirstStart);  
+    }
+    return pFirstStart;
+}
