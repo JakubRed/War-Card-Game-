@@ -10,9 +10,20 @@ void printPtr(int iteration,
     struct card* pCurrentOriginalDeck,
     struct card* pCurrentNewDeck);
 
+int countCards(
+    struct card* pFirstCard)
+    {
+    int cardCount = 0;
+    while (pFirstCard != NULL)
+    {
+        cardCount++;
+        pFirstCard = pFirstCard->nextCard;
+    }
+    return cardCount;
+    }
 struct card* createDeck (
     int deckQty,
-    int jockers) {
+    int jockers) { 
     struct card* pFirstCard = NULL;
     struct card* pCurrent, * pPrevious = NULL;
     enum SIUTS currentSiuts = Clubs;
@@ -26,8 +37,7 @@ struct card* createDeck (
                 if (NULL == pFirstCard)
                 {
                     pFirstCard = (struct card*)malloc(sizeof(struct card));
-                    // Debug logs
-                    // printf("%d:%d\n", siut, rank);
+
                     pFirstCard->siut = siut;
                     pFirstCard->rank = rank++;
                     pFirstCard->IdNum = siut * 100 + rank;
@@ -40,27 +50,26 @@ struct card* createDeck (
 
                 pPrevious->nextCard = pCurrent;
                 pPrevious = pCurrent;
-
-                // Debug logs
-                // printf("%d:%d\n", siut, rank);
             }
         }
+    }
         for (size_t i = 0; i < jockers; i++)
-        {            
-            pCurrent = (struct card*)malloc(sizeof(struct card));
-            pCurrent->siut = 4;
-            pCurrent->rank = 15;
-            pCurrent->IdNum = 415;    
+    {            
+        pCurrent = (struct card*)malloc(sizeof(struct card));
+        pCurrent->siut = JOKER_SIUT;
+        pCurrent->rank = RANKS_QTY;
+        pCurrent->IdNum = 415;    
 
-            pPrevious->nextCard = pCurrent;
-            pPrevious = pCurrent;
-            // Debug logs
-            // printf("Joker\n");
-        }
+        pPrevious->nextCard = pCurrent;
+        pPrevious = pCurrent;
     }
     return pFirstCard;
 }
 
+int CardValue(struct card* card)
+{
+    return card->rank + card->siut*20;
+}
 void printCard (
     struct card* pCard)
 {
@@ -114,6 +123,23 @@ void printCard (
 void showDeck (
     struct card* pFirstCard){
     int i = 0;
+
+    if (NULL == pFirstCard)
+    {
+        printf("EMPTY\n");
+        return;
+    }    
+    // while (NULL != pFirstCard)
+    // {   
+    //     printCard(pFirstCard);
+    //     printf("=%d", CardValue(pFirstCard));
+    //     // printf("\n");
+    //     if(11 < i++) {
+    //         printf("\n");
+    //         i = 0;
+    //     }        
+    //     pFirstCard = pFirstCard->nextCard;
+    // } 
     while (NULL != pFirstCard)
     {   
         printCard(pFirstCard);
@@ -135,11 +161,7 @@ struct card* splitDumb(
     int deckSize = 0;
 
     // Split in two
-    while (pCurrent != NULL)
-    {
-        cardCount++;
-        pCurrent = pCurrent->nextCard;
-    }
+    cardCount = countCards(pCurrent);
 
     printf("\nCard count = %d\n", cardCount);
     deckSize = cardCount/2;
@@ -178,15 +200,14 @@ struct card* splitEqually(
         // printPtr(iteration++, pFirstCard, pNewDeck, pCurrentOriginalDeck, pCurrentNewDeck);
     }
 
-    pCurrentOriginalDeck->nextCard = NULL;
-    
-     return pNewDeck;
+    pCurrentOriginalDeck->nextCard = NULL;    
+    return pNewDeck;
 }
 
-struct card* shuffle(
-    struct card* pDeck,
+void shuffle(
+    struct card** pDeck,
     int howManyShuffles){
-    struct card* pFirstStart = pDeck;
+    struct card* pFirstStart = (*pDeck);
     struct card* pFirstStop = NULL;
     struct card* pSecoondStart = NULL;
     struct card* pScoondStop = NULL;
@@ -197,10 +218,7 @@ struct card* shuffle(
     int thirdStatringPoint = 0;
     srand(time(NULL));
 
-    for (struct card* pCurrent = pFirstStart; NULL != pCurrent->nextCard; cardCount++)
-    {
-        pCurrent = pCurrent->nextCard;
-    }
+    cardCount = countCards(pFirstStart);
 
     for (size_t shuffleCount = 0; shuffleCount < howManyShuffles; shuffleCount++)
     {
@@ -242,7 +260,17 @@ struct card* shuffle(
             pFirstStart = pSecoondStart;
         }        
     }
-    return pFirstStart;
+    (*pDeck) = pFirstStart;
+}
+
+
+void swap(
+    struct card* ptr1, 
+    struct card* ptr2)
+{
+    struct card* tmp = ptr2->nextCard;
+    ptr2->nextCard = ptr1;
+    ptr1->nextCard = tmp;
 }
 
 int compare(
@@ -250,119 +278,279 @@ int compare(
     struct card* Deck2Card)
 {
     int retVal = GENERIC_ERROR;
-    printCard(Deck1Card);
-    printf("\t - ");
-    printCard(Deck2Card);
+    // printCard(Deck1Card);
+    // printf("\t - ");
+    // printCard(Deck2Card);
+
+    if (NULL == Deck1Card)
+    {
+        return FISRT_IS_WINNER + OPPONENT_LOST;
+    }
+    else if (NULL == Deck2Card)
+    {
+        return SECOND_IS_WINNER + OPPONENT_LOST;
+    }    
 
     if (Deck1Card->rank > Deck2Card->rank) {
         retVal = FISRT_IS_WINNER; //first card wins
-        printf("\twinner is: ");
-        printCard(Deck1Card);
+        // printf("\twinner is: D1");
+        // printCard(Deck1Card);
     }
     else if (Deck1Card->rank < Deck2Card->rank) {
         retVal = SECOND_IS_WINNER; //second card wins
-        printf("\twinner is: ");
-        printCard(Deck2Card);
+        // printf("\twinner is: D2");
+        // printCard(Deck2Card);
     }
     else if (Deck1Card->rank == Deck2Card->rank) {
+        // printf("\nD1:");
+        // showDeck(Deck1Card);
+        // printf("\nD2:");
+        // showDeck(Deck2Card);
         retVal = ITS_A_DRAW; //it's a draw
-        printf("\tdraw ");
+        // printf("\n~~~~draw~~~~\n ");
     }
-    printf("\n");
+    else{
+        printf("ERROR in compare()");
+    }
+    // printf("\n");
     return retVal;
 }
 
-struct card* theWinnerTakesItAll(struct card* victor, struct card* victorEnd, struct card* vanquished)
+void addDeckToEnd(
+    struct card* primaryDeck,
+    struct card* toBeAdded)
 {
+    while (NULL != primaryDeck->nextCard)
+    {
+        primaryDeck = primaryDeck->nextCard;
+    }
+    primaryDeck->nextCard = toBeAdded;
+    
+}
+
+struct card*  shiftPointer(
+    struct card* deck,
+    int amount)
+{
+    for (size_t i = 0; i < amount; i++)
+    {
+        deck = deck->nextCard;
+    }
+    return deck;
 
 }
 
-void conquer(struct card** victor, struct card* victorEnd, struct card** vanquished)
+void conquer(struct card** victor, struct card** victorEnd, struct card** vanquished)
 {
+    (*victorEnd)->nextCard = (*vanquished);
+    (*vanquished) = (*vanquished)->nextCard;
+    (*victorEnd) = (*victorEnd)->nextCard;
 
-    victorEnd->nextCard =  (*vanquished);
-     (*vanquished) =  (*vanquished)->nextCard;
-    victorEnd = victorEnd->nextCard;
-
-    victorEnd->nextCard = (*victor);
+    (*victorEnd)->nextCard = (*victor);
     (*victor) = (*victor)->nextCard;
-    victorEnd = victorEnd->nextCard;
-    victorEnd->nextCard= NULL;
-    
+    (*victorEnd) = (*victorEnd)->nextCard;
+    (*victorEnd)->nextCard= NULL;
+}
 
-    printf("\nvictor\n");
-    showDeck ((*victor));
-    printf("\nvanquished\n");
-    showDeck ( (*vanquished));
+int war(
+    struct card** Deck1Start,
+    struct card** Deck1End,
+    struct card** Deck2Start,
+    struct card** Deck2End)
+{
+    struct card* Deck1Current = (*Deck1Start);
+    struct card* Deck2Current = (*Deck2Start);
+    struct card* pool = NULL;
+    int winner = 0, insideWinner = 0;
+    // printf("\nDeck1");
+    // printCard((*Deck1Start));
+    // printf("\nDeck2");
+    // printCard((*Deck2Start));
+
+    //switch to hidden card
+    Deck1Current = Deck1Current->nextCard;
+    Deck2Current = Deck2Current->nextCard;
+    //switch to second combatant
+    Deck1Current = Deck1Current->nextCard;
+    Deck2Current = Deck2Current->nextCard;
+    
+    // printf("\nDeck1");
+    // showDeck((*Deck1Start));
+    // printf("\nDeck2");
+    // showDeck((*Deck2Start));
+    winner = compare(Deck1Current, Deck2Current);
+    switch (winner)
+    {
+    case FISRT_IS_WINNER:
+    // printf("\np1win\n");
+        (*Deck1End)->nextCard = (*Deck1Start);
+        (*Deck1Start) = Deck1Current->nextCard;
+        (*Deck1End) = Deck1Current;
+        Deck1Current->nextCard = (*Deck2Start);
+        (*Deck2Start) = Deck2Current->nextCard;
+        Deck2Current->nextCard = NULL;
+        (*Deck1End) = Deck2Current;
+        break;
+    case SECOND_IS_WINNER:        
+    // printf("\np2win\n");
+        (*Deck2End)->nextCard = (*Deck2Start);
+        (*Deck2Start) = Deck2Current->nextCard;
+        (*Deck2End) = Deck2Current;
+        Deck2Current->nextCard = (*Deck1Start);
+        (*Deck1Start) = Deck1Current->nextCard;
+        Deck1Current->nextCard = NULL;
+        (*Deck2End) = Deck1Current;
+        break;
+    case ITS_A_DRAW:
+    // printf("\nInside Job\n"); 
+        pool = (*Deck1Start);
+        (*Deck1Start) = Deck1Current;
+        pool->nextCard->nextCard = (*Deck2Start);
+        (*Deck2Start) = Deck2Current;        
+        pool->nextCard->nextCard->nextCard->nextCard = NULL;
+
+        // printf("\npool");
+        // showDeck(pool);
+        insideWinner = war(Deck1Start, Deck1End, Deck2Start, Deck2End);
+        if (FISRT_IS_WINNER == insideWinner) 
+        {
+            // (*Deck1End)->nextCard->nextCard->nextCard->nextCard = pool;
+            addDeckToEnd((*Deck1End), pool);
+            (*Deck1End) = shiftPointer(pool, 3);
+        }
+        else if (SECOND_IS_WINNER == insideWinner)
+        {
+            
+            addDeckToEnd((*Deck2End), pool);
+            // (*Deck2End)->nextCard->nextCard->nextCard->nextCard = pool;
+            (*Deck2End) = shiftPointer(pool, 3);
+            // (*Deck2End) = pool->nextCard->nextCard->nextCard;
+            // printf("\nD1:");
+            // showDeck(Deck1Current);
+            // printf("\nD2:");
+            // showDeck(Deck2Current);
+            return winner;
+        }
+        else if(ITS_A_DRAW == insideWinner); //going out of inner war, return not needed
+        else {
+            printf("\nERROR in WAR() - %d\n", insideWinner);
+        }            
+        break;    
+    case FISRT_IS_WINNER + OPPONENT_LOST:
+        (*Deck1End)->nextCard = (*Deck2Start);
+        (*Deck1End) = (*Deck2End);
+        (*Deck2Start) = NULL;
+        (*Deck2End) = NULL;
+        break;
+    case SECOND_IS_WINNER + OPPONENT_LOST:
+        (*Deck2End)->nextCard = (*Deck1Start);
+        (*Deck2End) = (*Deck1End);
+        (*Deck1Start) = NULL;
+        (*Deck1End) = NULL;
+        break;
+    default:
+        break;
+    }
+    // printf("\nafter\n");
+    // printf("\nDeck1Start");
+    // printCard((*Deck1Start));
+    // printf("\nDeck2Start");
+    // printCard((*Deck2Start));
+ 
+    // printf("\nDeck1");
+    // showDeck((*Deck1Start));
+    // printf("\nDeck2");
+    // showDeck((*Deck2Start));
+    return winner;
 }
 
 int actualGame(
-    struct card* Deck1Start, 
-    struct card* Deck2Start)
+    struct card** D1, 
+    struct card** D2)
     {
-        int winner = 0;
-        struct card* Deck1Stop = Deck1Start;  
-        struct card* Deck2Stop = Deck2Start;
-        while (NULL != Deck1Stop->nextCard)
+        int flagg = 0;
+        int flagg2 = 0;
+        int winner = 0, turn = 1;
+        struct card* Deck1Start = (*D1);
+        struct card* Deck2Start = (*D2);
+        struct card* Deck1End = Deck1Start;  
+        struct card* Deck2End = Deck2Start;
+        while (NULL != Deck1End->nextCard)
         {
-            Deck1Stop = Deck1Stop->nextCard;
+            Deck1End = Deck1End->nextCard;
         }
-        while (NULL != Deck2Stop->nextCard)
+        while (NULL != Deck2End->nextCard)
         {
-            Deck2Stop = Deck2Stop->nextCard;
+            Deck2End = Deck2End->nextCard;
         }
         
 
-    printf("\nD1\n");
-    showDeck (Deck1Start);
-    printf("\nD2\n");
-    showDeck (Deck2Start);
-    printf("\n");
-        // while (NULL != Deck1Start && NULL != Deck2Start)
+    // printf("\nD1\n");
+    // showDeck (Deck1Start);
+    // printf("\nD2\n");
+    // showDeck (Deck2Start);
+    // printf("\n");
+        while (NULL != Deck1Start && NULL != Deck2Start)
+        {              
+
+    // printf("\nTurn %d.", turn++);
+    // printf("\n CONQUest no. %d\n", i+1);
+    // printf("\n");
+    // printf("\n");
+        // if (flagg++ < 3)
         // {
+        //     printf("\nD1~~ %d", flagg);
+        //     showDeck (Deck1Start);
+        //     printf("\nD2~~ %d", flagg);
+        //     showDeck (Deck2Start);  
+        // }
+        
             winner = compare(Deck1Start, Deck2Start);
             switch (winner)
             {
             case FISRT_IS_WINNER:
-                conquer(&Deck1Start, Deck1Stop, &Deck2Start);
-                printf("\n[1]\n");
+                conquer(&Deck1Start, &Deck1End, &Deck2Start);
                 break;
             case SECOND_IS_WINNER:
-                // Deck1Start = conquer(Deck2Start, Deck2Stop, Deck1Start);
-                conquer(&Deck2Start, Deck2Stop, &Deck1Start);
-                printf("\n[2]\n");
+                conquer(&Deck2Start, &Deck2End, &Deck1Start);
                 break;
             case ITS_A_DRAW:
-                /* code */
+            // printf("\n\nwarrr\n\n");
+                war(&Deck1Start, &Deck1End, &Deck2Start, &Deck2End);
+                // printf("\nD1!\n");
+                // showDeck (Deck1Start);
+                // printf("\nD2!\n");
+                // showDeck (Deck2Start);    
                 break;
             
             default:
                 break;
-            }            
-        // }  
-        printf("\nDeck1 start: ");
-        printCard(Deck1Start);
-        printf("\tDeck1 stop: ");
-        printCard(Deck1Stop);
-        printf("\nDeck2 start: ");
-        printCard(Deck2Start);
-        printf("\tDeck2 stop: ");
-        printCard(Deck2Stop);
-
-    printf("\nAFTER CONQUER\n");
-    printf("\nD1\n");
-    showDeck (Deck1Start);
-    printf("\nD2\n");
-    showDeck (Deck2Start);
+            }    
+            // if (flagg2++ < 4)
+            // {
+            //     printf("\nD1! - %d\n", flagg2);
+            //     showDeck (Deck1Start);
+            //     printf("\nD2! - %d\n", flagg2);
+            //     showDeck (Deck2Start);    
+            // }
+            // printf("\nDeck 2 end ");
+            // printCard(Deck2End);
+             
+        
+        // printf("\t %d Cards\n", countCards(Deck1Start) + countCards(Deck2Start));           
+        }  
+        (*D1) = Deck1Start;
+        (*D2) = Deck2Start;
         return 0;
     }
 
 
-void clearMemory(struct card* pFirstCard) {
+void clearMemory(
+    struct card* pFirstCard) {
     struct card* pCurrent = pFirstCard;
     struct card* pNextCard;
 
-    while (pCurrent != NULL) {
+    while (NULL != pCurrent) {
         pNextCard = pCurrent->nextCard;  // Save the next node before freeing the current one
         free(pCurrent);             // Free the current node
         pCurrent = pNextCard;        // Move to the next node
@@ -370,7 +558,7 @@ void clearMemory(struct card* pFirstCard) {
 }
 
 
-//Debug
+//Debug~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void printPtr(int iteration,
     struct card* pFirstCard,
     struct card* newDeck,
@@ -391,18 +579,18 @@ void printPtr(int iteration,
         showDeck(newDeck);
     }
 
-void bubbleSort(int arr[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                // Swap the elements if they are in the wrong order
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
-    }
-}
+// void bubbleSort(int arr[], int n) {
+//     for (int i = 0; i < n - 1; i++) {
+//         for (int j = 0; j < n - i - 1; j++) {
+//             if (arr[j] > arr[j + 1]) {
+//                 // Swap the elements if they are in the wrong order
+//                 int temp = arr[j];
+//                 arr[j] = arr[j + 1];
+//                 arr[j + 1] = temp;
+//             }
+//         }
+//     }
+// }
 void findMinMax(int arr[], int size, int *min, int *max) {
     // Check if the array is empty
     if (size == 0) {
@@ -438,4 +626,27 @@ void random()
     printf("finding");
     findMinMax(arr, SIZE, &pMin, &pMax);
 printf("\nMin = %d\nMax = %d\n", pMin, pMax);
+}
+
+void push(struct card** head_ref, int new_siut, int new_rank) {
+    // Tworzenie nowego elementu
+    struct card* new_node = (struct card*)malloc(sizeof(struct card));
+    // Ustawienie wartości nowego elementu
+    new_node->siut = new_siut;
+    new_node->rank = new_rank;
+    // Ustawienie wskaźnika na kolejny element jako aktualny pierwszy element listy
+    new_node->nextCard = (*head_ref);
+    // Przestawienie wskaźnika na początek listy na nowy element
+    (*head_ref) = new_node;
+}
+
+void turnInfo(
+    struct card* Deck1Card,
+    struct card* Deck2Card,
+    int winner,
+    int* turn)
+{
+    printCard(Deck1Card);
+    printf("\t - ");
+    printCard(Deck2Card);
 }

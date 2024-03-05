@@ -10,8 +10,11 @@
 
 #define FISRT_IS_WINNER 1
 #define SECOND_IS_WINNER 2
+#define OPPONENT_LOST 3
 #define ITS_A_DRAW 3
 
+#define JOKER_SIUT 4
+#define JOKER_RANK 15
 
 //error codes
 #define GENERIC_ERROR 0
