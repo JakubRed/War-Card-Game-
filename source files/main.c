@@ -1,49 +1,38 @@
 #include <stdio.h>
 #include <stdlib.h> 
-#include <stdbool.h>
-#include "constants.h"
+// #include <stdbool.h>
+#include "Include/constants.h"
 // #include "functions.h"
-#include "functions.c"
+#include "game.c"
+#include "prepareDeck.c"
+#include "simulation.c"
 
+// void inicializePlayset(TWO_DECKS * pPlayset)
+// {
+//     pPlayset->pDeck1 = NULL;
+//     pPlayset->pDeck2 = NULL;
+// }
 int main()
 {
     system("cls");
-    struct card * Deck1 = NULL;
-    struct card * Deck2 = NULL;
+    printf("START\n");
+    GAME_RESULTS result;
+    result = oneWholeGame(1, 0);
+    showResult(result);
+    // // TWO_DECKS * pPlayset;
+    // // inicializePlayset(pPlayset);
+    // struct card * pDeck1 = NULL;
+    // struct card * pDeck2 = NULL;
+    // // pPlayset->pDeck1 = pDeck1;
+    // // pPlayset->pDeck2 = pDeck2;
+    // createTwoDecks(&pDeck1, &pDeck2, 1, 0);
+    // showBothDecks(pDeck1, pDeck2); 
+    
+    // actualGame(&pDeck1, &pDeck2);
+    // showBothDecks(pDeck1, pDeck2); 
 
-    Deck1 = createDeck (1, 2);
-    // printf("=========================================================================");
-    // printf("\nSTART\n");
-    // printf("=========================================================================\n");
-    // showDeck (Deck1);
-
-    Deck2 = splitEqually(Deck1);  
-    // push(&Deck1, 2, 2);
-    // push(&Deck2, 2, 2);
-    // push(&Deck1, 2, 2);
-    // push(&Deck2, 2, 2);
-    // push(&Deck1, 2, 2);
-    // push(&Deck2, 2, 2);
-    printf("\nD1\n");
-    showDeck (Deck1);
-    printf("\nD2\n");
-    showDeck (Deck2);
-    shuffle(&Deck1, 200);
-    shuffle(&Deck2, 200);
-    printf("\nAfter Shuffle:\n");
-    printf("\nD1:\n");
-    showDeck (Deck1);
-    printf("\nD2:\n");
-    showDeck (Deck2);
-    actualGame(&Deck1, &Deck2);
-    printf("\n %d Cards at the end of 'da Game\n", countCards(Deck1) + countCards(Deck2));
-    printf("\nD1:\n");
-    showDeck (Deck1);
-    printf("\nD2:\n");
-    showDeck (Deck2);
-
-    clearMemory(Deck1);
-    clearMemory(Deck2);
-    printf("\nEND\n");
+    // clearMemory(pDeck1);
+    // clearMemory(pDeck2);
+    printf("\nEND");
     return 0;
 }
