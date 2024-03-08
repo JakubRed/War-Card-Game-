@@ -5,8 +5,7 @@
     "corecrt_malloc.h": "c",
     "stdio.h": "c",
     "stdbool.h": "c",
-    "cmath": "c",
-    "functions.h": "c"
+    "cmath": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",

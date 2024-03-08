@@ -16,9 +16,9 @@ int main()
 {
     system("cls");
     printf("START\n");
-    GAME *gameInst;
-    gameInst = oneWholeGame(gameInst);
-    showgameInst(gameInst);
+    GAME_RESULTS result;
+    result = oneWholeGame(1, 0);
+    showResult(result);
     // // TWO_DECKS * pPlayset;
     // // inicializePlayset(pPlayset);
     // struct card * pDeck1 = NULL;

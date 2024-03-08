@@ -12,7 +12,7 @@
 //     struct card* pCurrentOriginalDeck,
 //     struct card* pCurrentNewDeck);
 
-GAME showResults(
+GAME_RESULTS showResults(
     int* pRound, 
     struct card* pDeck1,
     struct card* pDeck2)
@@ -180,15 +180,16 @@ int war(
     return winner;
 }
 
-GAME * actualGame(
-    GAME * gameInst
-    )
+GAME_RESULTS actualGame(
+    struct card**pDeck1, 
+    struct card** pDeck2)
 {
-    struct card* pDeck1Start = (gameInst->pPlayset.pDeck1);
-    struct card* pDeck2Start = (gameInst->pPlayset.pDeck2);
+    int winner = 0, round = 1;
+    struct card* pDeck1Start = (*pDeck1);
+    struct card* pDeck2Start = (*pDeck2);
     struct card* pDeck1End = pDeck1Start;  
     struct card* pDeck2End = pDeck2Start;
-    GAME result;
+    GAME_RESULTS result;
     while (NULL != pDeck1End->nextCard)
     {
         pDeck1End = pDeck1End->nextCard;
@@ -200,8 +201,8 @@ GAME * actualGame(
 
     while (NULL != pDeck1Start && NULL != pDeck2Start)
     {              
-        gameInst->winner = compare(pDeck1Start, pDeck2Start);
-        switch (gameInst->winner)
+        winner = compare(pDeck1Start, pDeck2Start);
+        switch (winner)
         {
         case FISRT_IS_WINNER:
             conquer(&pDeck1Start, &pDeck1End, &pDeck2Start);
@@ -210,26 +211,26 @@ GAME * actualGame(
             conquer(&pDeck2Start, &pDeck2End, &pDeck1Start);
             break;
         case ITS_A_DRAW:
-            gameInst->winner = war(&pDeck1Start, &pDeck1End, &pDeck2Start, &pDeck2End);
+            winner = war(&pDeck1Start, &pDeck1End, &pDeck2Start, &pDeck2End);
 
             break;
         
         default:
             break;
         }     
-        gameInst->rounds++;
+        round++;
     // showResults(&round, pDeck1Start, pDeck2Start);                 
     }  
     // printf("End after mere %d. rounds :)\n", round);
-    (gameInst->pPlayset.pDeck1) = pDeck1Start;
-    (gameInst->pPlayset.pDeck2) = pDeck2Start;
+    (*pDeck1) = pDeck1Start;
+    (*pDeck2) = pDeck2Start;
 
-    // result.pDeck1 = (*pDeck1);
-    // result.pDeck2 = (*pDeck2);
-    // result.rounds = round;
-    // result.winner = winner;
+    result.pDeck1 = (*pDeck1);
+    result.pDeck2 = (*pDeck2);
+    result.rounds = round;
+    result.winner = winner;
 
-    return gameInst;
+    return result;
 }
     
 void clearMemory(

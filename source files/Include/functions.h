@@ -34,7 +34,10 @@ void shuffle(
     int howManyShuffles);
 
 void createTwoDecks(
-    GAME * gameInst);
+    struct card** pDeck1, 
+    struct card** pDeck2,
+    int deckQty,
+    int jockers);
 
 int compare(
     struct card* Deck1Card, 
@@ -55,8 +58,9 @@ int war(
     struct card** Deck2Start,
     struct card** Deck2End);
 
-GAME * actualGame(
-    GAME * gameInst);
+GAME_RESULTS actualGame(
+    struct card** D1, 
+    struct card** D2);
 
 void clearMemory(
     struct card* pFirstCard);

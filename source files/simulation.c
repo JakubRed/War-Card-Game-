@@ -7,40 +7,37 @@
 #include "Include/functions.h"
 
 
-GAME * oneWholeGame(
-    GAME * gameInst
+GAME_RESULTS oneWholeGame(
+    int deckQty,
+    int jockers
 )
 {    
-    printf("LessaGo\n");
+    GAME_RESULTS result;
+    TWO_DECKS * pPlayset;
     // inicializePlayset(pPlayset);
-    struct card * D1;
-    struct card * D2;
-    gameInst->pPlayset.pDeck1 = D1;
-    gameInst->pPlayset.pDeck2 = D2;
-    printf("LessaGo\n");
-    gameInst->rounds = 1;
-    gameInst->winner = 0;
-    // pPlayset->pDeck1 = pDeck1;
-    // pPlayset->pDeck2 = pDeck2;
-    createTwoDecks(gameInst);
-    showBothDecks(gameInst->pPlayset.pDeck1, gameInst->pPlayset.pDeck2); 
-    
-    gameInst = actualGame(gameInst);
+    struct card * pDeck1 = NULL;
+    struct card * pDeck2 = NULL;
+    pPlayset->pDeck1 = pDeck1;
+    pPlayset->pDeck2 = pDeck2;
+    createTwoDecks(&pDeck1, &pDeck2, deckQty, jockers);
     // showBothDecks(pDeck1, pDeck2); 
-    return gameInst;
+    
+    result = actualGame(&pDeck1, &pDeck2);
+    // showBothDecks(pDeck1, pDeck2); 
+    return result;
 }
 
-void showgameInst(
-    GAME * gameInst)
+void showResult(
+    GAME_RESULTS result)
 {
-    if ((FISRT_IS_WINNER == gameInst->winner || FISRT_IS_WINNER + OPPONENT_OUT_OF_CARDS == gameInst->winner) && NULL == gameInst->pPlayset.pDeck2);
-    else if((SECOND_IS_WINNER == gameInst->winner || SECOND_IS_WINNER + OPPONENT_OUT_OF_CARDS == gameInst->winner) && NULL == gameInst->pPlayset.pDeck1);
+    if ((FISRT_IS_WINNER == result.winner || FISRT_IS_WINNER + OPPONENT_OUT_OF_CARDS == result.winner) && NULL == result.pDeck2);
+    else if((SECOND_IS_WINNER == result.winner || SECOND_IS_WINNER + OPPONENT_OUT_OF_CARDS == result.winner) && NULL == result.pDeck1);
     else {
-        printf("gameInst Error~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+        printf("Result Error~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
         // return;
     }
-    printf("\ngameInstS:\n");
-    printf("Deck %d won in %d rounds.\n", gameInst->winner, gameInst->rounds);
-    showBothDecks(gameInst->pPlayset.pDeck1, gameInst->pPlayset.pDeck2);
+    printf("\nRESULTS:\n");
+    printf("Deck %d won in %d rounds.\n", result.winner, result.rounds);
+    showBothDecks(result.pDeck1, result.pDeck2);
     
 }
