@@ -2,6 +2,7 @@
 // #include "functions.c"
 #include "constants.h"
 
+//prepareDeck
 int countCards(
     struct card* pFirstCard);
 
@@ -34,11 +35,9 @@ void shuffle(
     int howManyShuffles);
 
 void createTwoDecks(
-    struct card** pDeck1, 
-    struct card** pDeck2,
-    int deckQty,
-    int jockers);
+    GAME * gameInst);
 
+//game
 int compare(
     struct card* Deck1Card, 
     struct card* Deck2Card);
@@ -58,13 +57,19 @@ int war(
     struct card** Deck2Start,
     struct card** Deck2End);
 
-GAME_RESULTS actualGame(
-    struct card** D1, 
-    struct card** D2);
+GAME actualGame(
+    GAME * gameInst);
 
-void clearMemory(
+void clearMemoryLinkedList(
     struct card* pFirstCard);
 
+//simulation
+
+void oneWholeGame(
+    GAME * gameInst);
+
+void showResult(
+    GAME gameInst);
 //Debug~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void printPtr(int iteration,
     struct card* pFirstCard,
