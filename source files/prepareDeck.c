@@ -267,13 +267,11 @@ void shuffle(
 }
 
 void createTwoDecks(
-    struct card** pDeck1, 
-    struct card** pDeck2,
-    int deckQty,
-    int jockers)
+    GAME * gameInst
+)
 {
-    (*pDeck1) = createDeck (deckQty, jockers);    
-    (*pDeck2) = splitEqually (*pDeck1);
-    shuffle(pDeck1, 100);
-    shuffle(pDeck2, 100);
+    (gameInst->pPlayset.pDeck1) = createDeck (gameInst->startParameters.deckQty, gameInst->startParameters.jockerQty);    
+    (gameInst->pPlayset.pDeck2) = splitEqually (gameInst->pPlayset.pDeck2);
+    shuffle(&(gameInst->pPlayset.pDeck1), 100);
+    shuffle(&(gameInst->pPlayset.pDeck2), 100);
 }

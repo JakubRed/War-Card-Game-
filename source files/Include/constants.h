@@ -57,8 +57,13 @@ typedef struct{
 } TWO_DECKS;
 
 typedef struct{
+    int deckQty;
+    int jockerQty;
+} START_PARAMETERS;
+
+typedef struct{
     int rounds;
     int winner;
-    struct card * pDeck1;
-    struct card * pDeck2;
-} GAME_RESULTS;
+    START_PARAMETERS startParameters;
+    TWO_DECKS pPlayset;
+} GAME;
