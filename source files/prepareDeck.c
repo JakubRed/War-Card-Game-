@@ -155,9 +155,9 @@ void showBothDecks(
     struct card* Deck1,
     struct card* Deck2)
     {
-        printf("\nDeck1:");
+        printf("Deck1:");
         showDeck(Deck1);
-        printf("\nDeck2:");
+        printf("Deck2:");
         showDeck(Deck2);
     }
     
@@ -267,13 +267,10 @@ void shuffle(
 }
 
 void createTwoDecks(
-    struct card** pDeck1, 
-    struct card** pDeck2,
-    int deckQty,
-    int jockers)
+    GAME * gameInst)
 {
-    (*pDeck1) = createDeck (deckQty, jockers);    
-    (*pDeck2) = splitEqually (*pDeck1);
-    shuffle(pDeck1, 100);
-    shuffle(pDeck2, 100);
+    gameInst->pPlayset.pDeck1 = createDeck (gameInst->startParams.decksQty, gameInst->startParams.jokersQty);    
+    gameInst->pPlayset.pDeck2 = splitEqually (gameInst->pPlayset.pDeck1);
+    shuffle(&gameInst->pPlayset.pDeck1, 100);
+    shuffle(&gameInst->pPlayset.pDeck2, 100);
 }

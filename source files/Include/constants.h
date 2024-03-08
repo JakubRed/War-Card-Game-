@@ -8,7 +8,8 @@
 #define UNI_SPADE "\u2664"
 #define UNI_B_SPADE "\u2660"
 
-#define GAME_OVER 0
+#define FIRST_ROUND 1
+#define NO_WINNER 0
 #define FISRT_IS_WINNER 1
 #define SECOND_IS_WINNER 2
 #define OPPONENT_OUT_OF_CARDS 3
@@ -57,8 +58,13 @@ typedef struct{
 } TWO_DECKS;
 
 typedef struct{
+    int decksQty;
+    int jokersQty;
+} STARTING_PARAMS;
+
+typedef struct{
     int rounds;
     int winner;
-    struct card * pDeck1;
-    struct card * pDeck2;
-} GAME_RESULTS;
+    STARTING_PARAMS startParams;
+    TWO_DECKS pPlayset;
+} GAME;
