@@ -243,8 +243,8 @@ GAME actualGame(
     }  
     gameInst->pPlayset.pDeck1 = pDeck1Start;
     gameInst->pPlayset.pDeck2 = pDeck2Start;
-    // free(pDeck1Start);
-    // free(pDeck2Start);
+    free(pDeck1Start);
+    free(pDeck2Start);
     // free(pDeck1End);
     // free(pDeck2End);
 }
