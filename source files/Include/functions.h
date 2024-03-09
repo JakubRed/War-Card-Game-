@@ -57,7 +57,7 @@ int war(
     struct card** Deck2Start,
     struct card** Deck2End);
 
-GAME actualGame(
+void actualGame(
     GAME * gameInst);
 
 void clearMemoryLinkedList(
@@ -65,31 +65,17 @@ void clearMemoryLinkedList(
 
 //simulation
 
+void initializeGameParams(
+    GAME * gameInst,
+    int decksQuantity,
+    int jockersQuantity);
+
+GAME simulation(
+    int decksQuantity, 
+    int jockersQuantity);
+
 void oneWholeGame(
     GAME * gameInst);
 
 void showResult(
     GAME gameInst);
-//Debug~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void printPtr(int iteration,
-    struct card* pFirstCard,
-    struct card* newDeck,
-    struct card* pCurrentOriginalDeck,
-    struct card* pCurrentNewDeck);
-
-void findMinMax(
-    int arr[], int size,
-    int *min, int *max);
-
-#define SIZE 10000
-void random();
-
-void push(
-    struct card** head_ref,
-    int new_siut, int new_rank);
-
-void turnInfo(
-    struct card* Deck1Card,
-    struct card* Deck2Card,
-    int winner,
-    int* turn);

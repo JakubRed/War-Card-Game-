@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h> 
 #include "Include/constants.h"
+#include "Include/functions.h"
 #include "game.c"
 #include "prepareDeck.c"
 #include "simulation.c"
-
 
 int main()
 {

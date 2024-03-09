@@ -5,7 +5,7 @@
 #include <time.h>
 #include <stdbool.h>
 #include "Include/functions.h"
- 
+
 void initializeGameParams(GAME * gameInst, int decksQuantity, int jockersQuantity)
 {
     gameInst->startParams.decksQty = decksQuantity;

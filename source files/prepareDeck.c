@@ -127,17 +127,7 @@ void showDeck (
         printf(" EMPTY\n");
         return;
     }    
-    // while (NULL != pFirstCard)
-    // {   
-    //     printCard(pFirstCard);
-    //     printf("=%d", CardValue(pFirstCard));
-    //     // printf("\n");
-    //     if(11 < i++) {
-    //         printf("\n");
-    //         i = 0;
-    //     }        
-    //     pFirstCard = pFirstCard->nextCard;
-    // } 
+
     while (NULL != pFirstCard)
     {   
         printCard(pFirstCard);
@@ -223,6 +213,11 @@ void shuffle(
     int thirdStatringPoint = 0;
     srand(time(NULL));
 
+    if (NULL == pDeck)
+    {
+        printf("Error in shuffle(), pDeck is NULL\n");
+    }
+    
     cardCount = countCards(pFirstStart);
 
     for (size_t shuffleCount = 0; shuffleCount < howManyShuffles; shuffleCount++)
