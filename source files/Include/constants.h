@@ -1,4 +1,8 @@
 #pragma once
+
+#define IN
+#define OUT
+
 #define UNI_CLUB "\u2667"
 #define UNI_B_CLUB "\u2663"
 #define UNI_DIAMOND "\u2662"
@@ -68,3 +72,18 @@ typedef struct{
     STARTING_PARAMS startParams;
     TWO_DECKS pPlayset;
 } GAME;
+
+typedef struct{
+    int lowerLimit;
+    int upperLimit;
+}DECK_RANGE;
+typedef struct{
+    int lowerLimit;
+    int upperLimit;
+}JOCKER_RANGE;
+typedef struct{
+    DECK_RANGE decks;
+    JOCKER_RANGE jokers;
+    int oneSetIteration;
+    int currentIteration;
+}TEST_CASE;

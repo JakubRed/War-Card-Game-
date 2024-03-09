@@ -211,6 +211,7 @@ void shuffle(
     int cardCount = 0;
     int secondStartingPoint = 0;
     int thirdStatringPoint = 0;
+    
     srand(time(NULL));
 
     if (NULL == pDeck)

@@ -5,6 +5,14 @@
 #include <time.h>
 #include "Include/functions.h"
 
+void showResults(
+    int Round, 
+    struct card* pDeck1,
+    struct card* pDeck2)
+    {
+        printf("\npRound %d.\n", Round);
+        showBothDecks(pDeck1, pDeck2);
+    }
 int compare(
     struct card* pDeck1Card, 
     struct card* pDeck2Card)
@@ -58,7 +66,10 @@ struct card*  shiftPointer(
 
 }
 
-void conquer(struct card** pVictor, struct card** pVictorEnd, struct card** pVanquished)
+void conquer(
+    struct card** pVictor,
+    struct card** pVictorEnd,
+    struct card** pVanquished)
 {   
     if (NULL == pVictor)
     {
@@ -124,11 +135,13 @@ int war(
     }    
     
     //switch to hidden card
-    pDeck1Current = pDeck1Current->nextCard;
-    pDeck2Current = pDeck2Current->nextCard;
-    //switch to second combatant
-    pDeck1Current = pDeck1Current->nextCard;
-    pDeck2Current = pDeck2Current->nextCard;
+    pDeck1Current = shiftPointer(pDeck1Current, 2);
+    pDeck2Current = shiftPointer(pDeck2Current, 2);
+    // pDeck1Current = pDeck1Current->nextCard;
+    // pDeck2Current = pDeck2Current->nextCard;
+    // // switch to second combatant
+    // pDeck1Current = pDeck1Current->nextCard;
+    // pDeck2Current = pDeck2Current->nextCard;
 
     winner = compare(pDeck1Current, pDeck2Current);
     switch (winner)
@@ -184,7 +197,7 @@ int war(
     return winner;
 }
 
-void actualGame(
+GAME actualGame(
     GAME * gameInst
 )
 {    
@@ -225,10 +238,15 @@ void actualGame(
             printf("Error in actualGame(), impossible comparison result\n");
             break;
         }     
-        gameInst->rounds++;              
+        gameInst->rounds++;     
+        // showResults(gameInst->rounds, pDeck1Start, pDeck2Start) ;        
     }  
     gameInst->pPlayset.pDeck1 = pDeck1Start;
     gameInst->pPlayset.pDeck2 = pDeck2Start;
+    // free(pDeck1Start);
+    // free(pDeck2Start);
+    // free(pDeck1End);
+    // free(pDeck2End);
 }
 
 void clearMemoryLinkedList(

@@ -57,13 +57,26 @@ int war(
     struct card** Deck2Start,
     struct card** Deck2End);
 
-void actualGame(
+GAME actualGame(
     GAME * gameInst);
 
 void clearMemoryLinkedList(
     struct card* pFirstCard);
 
 //simulation
+
+TEST_CASE initializeTestCases(
+    int deckLowerLimit,
+    int deckUpperLimit,
+    int jokerLowerLimit,
+    int jokerUpperLimit,
+    int iterationsInEach);
+
+void researchFunc(
+    TEST_CASE * testCase);
+
+void showTestCaseResults(
+    GAME gameInst);
 
 void initializeGameParams(
     GAME * gameInst,
@@ -74,7 +87,7 @@ GAME simulation(
     int decksQuantity, 
     int jockersQuantity);
 
-void oneWholeGame(
+GAME oneWholeGame(
     GAME * gameInst);
 
 void showResult(
